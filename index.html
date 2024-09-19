@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Nave</title>
+
+    <link rel="shortcut icon" href="images/foguete.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./CSS/style.css">
+</head>
+
+<body>
+
+    <section>
+        <h3>Não deixe a nave explodir! Controle a aceleração dela clicando no botão direito do mouse!</h3>
+
+        <div class="nave">
+            <figure>
+                <img id="idNave" src="images/nave2.png">
+            </figure>
+
+            <div class="idInfo" id="idInfo">
+            </div>
+        </div>
+
+        
+    </section>
+
+    <script>
+
+        let motor = false;
+        let altitude = 230;
+        let combustivel = 40;
+        let velocidade = 0;
+        let aceleracao = 0;
+        let intervalo;
+
+        let liga = () => {
+            motor = true;
+            document.getElementById("idNave").src = "images/nave1.png";
+        }
+
+        let desliga = () => {
+            motor = false;
+            document.getElementById("idNave").src = "images/nave2.png";
+        }
+
+        let ciclo = () => {
+
+            document.getElementById("idInfo").innerHTML = `
+            velocidade: ${velocidade.toFixed(2)}<br/>
+            combustível: ${combustivel}<br/>
+            `
+
+            if (combustivel <= 0) desliga();
+            if (motor) {
+                aceleracao = 0.2;
+                combustivel--;
+            } else aceleracao = -0.3;
+            velocidade += aceleracao;
+            altitude += velocidade;
+
+
+
+            if (altitude <= 0) {
+                if (velocidade <= -3) {
+                    document.getElementById("idInfo").innerHTML = ("Nave explodiu! ):");
+                    clearInterval(intervalo);
+                    document.getElementById("idNave").src = "images/explosao2.png";
+                }
+                else document.getElementById("idInfo").innerHTML = ("Pouso bem-sucedido! :)");
+                clearInterval(intervalo);
+            }
+
+            document.getElementById("idNave").style.top = (300 - altitude) + "px";
+        }
+
+        intervalo = window.setInterval(ciclo, 100);
+
+        document.addEventListener('mousedown', liga);
+        document.addEventListener('mouseup', desliga);
+
+
+    </script>
+
+</body>
+
+</html>
